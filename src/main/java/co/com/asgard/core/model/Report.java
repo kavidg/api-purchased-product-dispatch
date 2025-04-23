@@ -19,6 +19,26 @@ public class Report {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "transportista_id", nullable = false)
+    private Carrier carrier;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Client client;
+
+    @Column(name = "date_office", nullable = false)
+    private LocalDateTime dateOffice;
+
+    @Column(name = "delivery_status", nullable = false, length = 50)
+    private String deliveryStatus;
+
+    @Column(nullable = false, length = 255)
+    private String destination;
+
+    @Column(columnDefinition = "TEXT")
+    private String details;
+    
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private AppUser user;
 
