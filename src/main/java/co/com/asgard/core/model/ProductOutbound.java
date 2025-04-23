@@ -1,11 +1,13 @@
 package co.com.asgard.core.model;
 
+import co.com.asgard.core.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "product_outbound")
@@ -30,4 +32,10 @@ public class ProductOutbound {
 
     @ManyToOne
     private AppUser responsible;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    private java.time.LocalDateTime statusUpdatedAt;
+ 
 }

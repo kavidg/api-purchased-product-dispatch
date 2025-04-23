@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: co.com.asgard.core.service.impl.ProductOutboundServiceImplTest
 -------------------------------------------------------------------------------
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.075 s -- in co.com.asgard.core.service.impl.ProductOutboundServiceImplTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.490 s -- in co.com.asgard.core.service.impl.ProductOutboundServiceImplTest

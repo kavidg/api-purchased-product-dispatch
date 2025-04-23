@@ -12,6 +12,8 @@ import co.com.asgard.core.repository.ProductRepository;
 import co.com.asgard.core.service.ProductOutboundService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import co.com.asgard.core.dto.ProductOutboundStatusUpdateDTO;
+import co.com.asgard.core.enums.OrderStatus;
 
 import java.util.UUID;
 
@@ -22,53 +24,61 @@ public class ProductOutboundServiceImpl implements ProductOutboundService {
     private final AppUserRepository userRepo;
     private final ProductOutboundRepository outboundRepo;
 
-<span class="fc" id="L25">    public ProductOutboundServiceImpl(ProductRepository productRepo, AppUserRepository userRepo, ProductOutboundRepository outboundRepo) {</span>
-<span class="fc" id="L26">        this.productRepo = productRepo;</span>
-<span class="fc" id="L27">        this.userRepo = userRepo;</span>
-<span class="fc" id="L28">        this.outboundRepo = outboundRepo;</span>
-<span class="fc" id="L29">    }</span>
+<span class="fc" id="L27">    public ProductOutboundServiceImpl(ProductRepository productRepo, AppUserRepository userRepo, ProductOutboundRepository outboundRepo) {</span>
+<span class="fc" id="L28">        this.productRepo = productRepo;</span>
+<span class="fc" id="L29">        this.userRepo = userRepo;</span>
+<span class="fc" id="L30">        this.outboundRepo = outboundRepo;</span>
+<span class="fc" id="L31">    }</span>
 
     public ProductOutboundResponseDTO registerOutbound(ProductOutboundRequestDTO dto) {
-<span class="fc" id="L32">        Product product = productRepo.findByCode(dto.getProductCode())</span>
-<span class="fc" id="L33">                .orElseThrow(() -&gt; new EntityServiceException(HttpStatus.NOT_FOUND, &quot;Producto con código &quot; + dto.getProductCode() + &quot; no encontrado&quot;));</span>
+<span class="fc" id="L34">        Product product = productRepo.findByCode(dto.getProductCode())</span>
+<span class="fc" id="L35">                .orElseThrow(() -&gt; new EntityServiceException(HttpStatus.NOT_FOUND, &quot;Producto con código &quot; + dto.getProductCode() + &quot; no encontrado&quot;));</span>
 
-<span class="fc bfc" id="L35" title="All 4 branches covered.">        if (dto.getQuantity() == null || dto.getQuantity() &lt;= 0) {</span>
-<span class="fc" id="L36">            throw new EntityServiceException(HttpStatus.BAD_REQUEST, &quot;Cantidad debe ser mayor a cero&quot;);</span>
+<span class="fc bfc" id="L37" title="All 4 branches covered.">        if (dto.getQuantity() == null || dto.getQuantity() &lt;= 0) {</span>
+<span class="fc" id="L38">            throw new EntityServiceException(HttpStatus.BAD_REQUEST, &quot;Cantidad debe ser mayor a cero&quot;);</span>
         }
 
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (product.getCurrentStock() &lt; dto.getQuantity()) {</span>
-<span class="fc" id="L40">            throw new EntityServiceException(HttpStatus.BAD_REQUEST, &quot;Stock insuficiente para esta salida&quot;);</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (product.getCurrentStock() &lt; dto.getQuantity()) {</span>
+<span class="fc" id="L42">            throw new EntityServiceException(HttpStatus.BAD_REQUEST, &quot;Stock insuficiente para esta salida&quot;);</span>
         }
 
-<span class="fc" id="L43">        AppUser user = userRepo.findById(dto.getResponsibleId())</span>
-<span class="fc" id="L44">                .orElseThrow(() -&gt; new EntityServiceException(HttpStatus.NOT_FOUND, &quot;Responsable no encontrado&quot;));</span>
+<span class="fc" id="L45">        AppUser user = userRepo.findById(dto.getResponsibleId())</span>
+<span class="fc" id="L46">                .orElseThrow(() -&gt; new EntityServiceException(HttpStatus.NOT_FOUND, &quot;Responsable no encontrado&quot;));</span>
 
         // Disminuir el stock
-<span class="fc" id="L47">        product.setCurrentStock(product.getCurrentStock() - dto.getQuantity());</span>
-<span class="fc" id="L48">        productRepo.save(product);</span>
+<span class="fc" id="L49">        product.setCurrentStock(product.getCurrentStock() - dto.getQuantity());</span>
+<span class="fc" id="L50">        productRepo.save(product);</span>
 
-<span class="fc" id="L50">        String codeRegister = &quot;OUT&quot; + UUID.randomUUID().toString().substring(0, 8).toUpperCase();</span>
+<span class="fc" id="L52">        String codeRegister = &quot;OUT&quot; + UUID.randomUUID().toString().substring(0, 8).toUpperCase();</span>
 
-<span class="fc" id="L52">        ProductOutbound outbound = new ProductOutbound();</span>
-<span class="fc" id="L53">        outbound.setProduct(product);</span>
-<span class="fc" id="L54">        outbound.setQuantity(dto.getQuantity());</span>
-<span class="fc" id="L55">        outbound.setDestination(dto.getDestination());</span>
-<span class="fc" id="L56">        outbound.setDate(dto.getDate());</span>
-<span class="fc" id="L57">        outbound.setResponsible(user);</span>
-<span class="fc" id="L58">        outbound.setCodeRegister(codeRegister);</span>
+<span class="fc" id="L54">        ProductOutbound outbound = new ProductOutbound();</span>
+<span class="fc" id="L55">        outbound.setProduct(product);</span>
+<span class="fc" id="L56">        outbound.setQuantity(dto.getQuantity());</span>
+<span class="fc" id="L57">        outbound.setDestination(dto.getDestination());</span>
+<span class="fc" id="L58">        outbound.setDate(dto.getDate());</span>
+<span class="fc" id="L59">        outbound.setResponsible(user);</span>
+<span class="fc" id="L60">        outbound.setCodeRegister(codeRegister);</span>
 
-<span class="fc" id="L60">        outboundRepo.save(outbound);</span>
+<span class="fc" id="L62">        outboundRepo.save(outbound);</span>
 
-<span class="fc" id="L62">        ProductOutboundResponseDTO responseDTO = new ProductOutboundResponseDTO();</span>
-<span class="fc" id="L63">        responseDTO.setCodeRegister(codeRegister);</span>
-<span class="fc" id="L64">        responseDTO.setProductName(product.getName());</span>
-<span class="fc" id="L65">        responseDTO.setQuantity(dto.getQuantity());</span>
-<span class="fc" id="L66">        responseDTO.setDestination(dto.getDestination());</span>
-<span class="fc" id="L67">        responseDTO.setDate(dto.getDate());</span>
-<span class="fc" id="L68">        responseDTO.setResponsibleName(user.getFullName());</span>
+<span class="fc" id="L64">        ProductOutboundResponseDTO responseDTO = new ProductOutboundResponseDTO();</span>
+<span class="fc" id="L65">        responseDTO.setCodeRegister(codeRegister);</span>
+<span class="fc" id="L66">        responseDTO.setProductName(product.getName());</span>
+<span class="fc" id="L67">        responseDTO.setQuantity(dto.getQuantity());</span>
+<span class="fc" id="L68">        responseDTO.setDestination(dto.getDestination());</span>
+<span class="fc" id="L69">        responseDTO.setDate(dto.getDate());</span>
+<span class="fc" id="L70">        responseDTO.setResponsibleName(user.getFullName());</span>
 
-<span class="fc" id="L70">        return responseDTO;</span>
+<span class="fc" id="L72">        return responseDTO;</span>
     }
+    @Override
+    public void updateStatus(ProductOutboundStatusUpdateDTO dto) {
+<span class="nc" id="L76">    ProductOutbound outbound = outboundRepo.findById(dto.getId())</span>
+<span class="nc" id="L77">        .orElseThrow(() -&gt; new EntityServiceException(HttpStatus.NOT_FOUND, &quot;Registro no encontrado con id: &quot; + dto.getId()));</span>
+
+<span class="nc" id="L79">    outbound.setStatus(dto.getStatus());</span>
+<span class="nc" id="L80">    outboundRepo.save(outbound);</span>
+<span class="nc" id="L81">}</span>
 }
 
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

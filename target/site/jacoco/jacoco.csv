@@ -1,5 +1,4 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-api-purchased-product-dispatch,co.com.asgard.core.service.impl,ProductOutboundServiceImpl,0,153,0,6,0,32,0,7,0,4
-api-purchased-product-dispatch,co.com.asgard.core.service.impl,ShippingLabelServiceImpl,0,108,0,0,0,23,0,3,0,3
-api-purchased-product-dispatch,co.com.asgard.core.service,ShipmentService,5,3,0,0,1,1,1,1,1,1
+api-purchased-product-dispatch,co.com.asgard.core.service.impl,ProductOutboundServiceImpl,28,153,0,6,5,32,2,7,2,4
+api-purchased-product-dispatch,co.com.asgard.core.service.impl,ShippingLabelServiceImpl,0,117,0,0,0,24,0,4,0,4
 api-purchased-product-dispatch,co.com.asgard.core,ApiPurchasedProductDispatchApplication,5,3,0,0,2,1,1,1,1,1

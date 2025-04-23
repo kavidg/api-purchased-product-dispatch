@@ -12,6 +12,8 @@ import co.com.asgard.core.repository.ProductRepository;
 import co.com.asgard.core.service.ProductOutboundService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import co.com.asgard.core.dto.ProductOutboundStatusUpdateDTO;
+import co.com.asgard.core.enums.OrderStatus;
 
 import java.util.UUID;
 
@@ -69,5 +71,13 @@ public class ProductOutboundServiceImpl implements ProductOutboundService {
 
         return responseDTO;
     }
+    @Override
+    public void updateStatus(ProductOutboundStatusUpdateDTO dto) {
+    ProductOutbound outbound = outboundRepo.findById(dto.getId())
+        .orElseThrow(() -> new EntityServiceException(HttpStatus.NOT_FOUND, "Registro no encontrado con id: " + dto.getId()));
+
+    outbound.setStatus(dto.getStatus());
+    outboundRepo.save(outbound);
+}
 }
 

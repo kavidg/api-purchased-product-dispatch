@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import co.com.asgard.core.dto.ProductOutboundStatusUpdateDTO;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 @RestController
 @RequestMapping("/api/outbound")
@@ -26,4 +28,11 @@ public class ProductOutboundController {
         ProductOutboundResponseDTO response = service.registerOutbound(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @PatchMapping("/status")
+    public ResponseEntity<Void> updateStatus(@RequestBody ProductOutboundStatusUpdateDTO dto) {
+    service.updateStatus(dto);
+    return ResponseEntity.noContent().build();
+    }
+
 }

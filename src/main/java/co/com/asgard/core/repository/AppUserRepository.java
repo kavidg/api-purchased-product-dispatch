@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
-    List<AppUser> findByRole_Name(String roleName); 
+    List<AppUser> findByRole_Name(String roleName); // Por ejemplo, encontrar todos los carriers
 }
