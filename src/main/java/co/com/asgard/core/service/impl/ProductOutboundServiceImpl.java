@@ -13,7 +13,6 @@ import co.com.asgard.core.service.ProductOutboundService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import co.com.asgard.core.dto.ProductOutboundStatusUpdateDTO;
-import co.com.asgard.core.enums.OrderStatus;
 
 import java.util.UUID;
 
