@@ -29,6 +29,7 @@ public class ReportController {
     @Autowired
     public ReportController(IReportService reportService) {
         this.reportService = reportService;
+        
     }
 
     @PostMapping("/generate")
